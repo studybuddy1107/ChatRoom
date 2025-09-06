@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Chat Room</title>
+  <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.4.0/firebase-database.js"></script>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    #messages { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; margin-bottom: 10px; }
+    input, button { padding: 10px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>Simple Firebase Chat Room</h2>
+  <div id="messages"></div>
+  <input id="name" placeholder="Your name" />
+  <input id="message" placeholder="Type a message..." />
+  <button onclick="sendMessage()">Send</button>
+
+  <script>
+    // 🔁 Replace this config with yours from Firebase Console
+    // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyCxOTwrBuseCQqUOmRBi94kLqGatwEXMwM",
+  authDomain: "chatroom-6ab46.firebaseapp.com",
+  projectId: "chatroom-6ab46",
+  storageBucket: "chatroom-6ab46.firebasestorage.app",
+  messagingSenderId: "1056579573993",
+  appId: "1:1056579573993:web:aebe91b272668a233a3878",
+  measurementId: "G-DEFVF402R9"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    function sendMessage() {
+      const name = document.getElementById('name').value.trim();
+      const message = document.getElementById('message').value.trim();
+      if (name && message) {
+        db.ref("messages").push({ name, message });
+        document.getElementById('message').value = '';
+      }
+    }
+
+    const messagesDiv = document.getElementById('messages');
+
+    db.ref("messages").on('child_added', (data) => {
+      const { name, message } = data.val();
+      const div = document.createElement('div');
+      div.textContent = `${name}: ${message}`;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+  </script>
+</body>
+</html>

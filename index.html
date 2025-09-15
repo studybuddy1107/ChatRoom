@@ -1,49 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>2-Person Chat</title>
-  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    #chat { border: 1px solid #ccc; height: 300px; overflow-y: scroll; padding: 10px; }
-    input, button { padding: 10px; font-size: 16px; margin-top: 10px; }
-    #username { width: 100px; }
-    #message { width: 200px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Study Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h2>Chat Room for Two</h2>
-  <div>
-    <input type="text" id="username" placeholder="Your name" />
-    <input type="text" id="message" placeholder="Your message..." />
-    <button onclick="sendMessage()">Send</button>
+  <header>
+    <h1>📘 Study Tracker</h1>
+    <p>Tension mat le ho jayega 🫂</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchSubject('Physics')">Physics</button>
+    <button class="tab-btn" onclick="switchSubject('Chemistry')">Chemistry</button>
+    <button class="tab-btn" onclick="switchSubject('Maths')">Maths</button>
+    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌓</button>
   </div>
-  <div id="chat"></div>
 
-  <script>
-    const socket = io('https://chat-server.glitch.me');
+  <main>
+    <button class="add-btn" onclick="openModal()">➕ Add Entry</button>
+    <div id="entries-container">
+      <!-- Entries will be shown here -->
+    </div>
+  </main>
 
-    function sendMessage() {
-      const name = document.getElementById('username').value.trim();
-      const msg = document.getElementById('message').value.trim();
-      if (!name || !msg) return;
+  <!-- Modal for adding entry -->
+  <div id="entry-modal" class="modal">
+    <div class="modal-content">
+      <h2>Add Study Entry</h2>
+      <input type="text" id="chapter" placeholder="Chapter Name" />
+      <input type="text" id="topic" placeholder="Topic Name" />
+      <input type="number" id="questions" placeholder="Questions Practiced" />
+      <textarea id="flaws" placeholder="Flaws / Notes..."></textarea>
+      <textarea id="doubts" placeholder="Doubts or Questions..."></textarea>
+      <div class="modal-actions">
+        <button onclick="addEntry()">✅ Save</button>
+        <button onclick="closeModal()">❌ Cancel</button>
+      </div>
+    </div>
+  </div>
 
-      socket.emit('chat message', `${name}: ${msg}`);
-      document.getElementById('message').value = '';
-    }
-
-    socket.on('chat message', function(msg) {
-      const chat = document.getElementById('chat');
-      const div = document.createElement('div');
-      div.textContent = msg;
-      chat.appendChild(div);
-      chat.scrollTop = chat.scrollHeight;
-    });
-
-    // Optional: Send message on Enter key
-    document.getElementById('message').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') sendMessage();
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
